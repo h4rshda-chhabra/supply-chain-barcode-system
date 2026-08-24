@@ -48,6 +48,8 @@ class Settings(BaseSettings):
     def fix_database_url(cls, v: str) -> str:
         if v and v.startswith("postgres://"):
             return v.replace("postgres://", "postgresql+psycopg2://", 1)
+        if v and v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+psycopg2://", 1)
         return v
 
     @field_validator("CORS_ORIGINS", mode="before")
