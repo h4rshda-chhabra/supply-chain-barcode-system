@@ -1,0 +1,70 @@
+import enum
+
+
+class BatchType(str, enum.Enum):
+    RAW_MATERIAL = "RAW_MATERIAL"
+    FINISHED_GOOD = "FINISHED_GOOD"
+
+
+class BatchStatus(str, enum.Enum):
+    ACTIVE = "ACTIVE"
+    ISSUED_OUT = "ISSUED_OUT"
+    CONSUMED = "CONSUMED"
+    DISPATCHED = "DISPATCHED"
+    EXPIRED = "EXPIRED"
+
+
+class BatchSourceType(str, enum.Enum):
+    GRN = "GRN"
+    PRODUCTION = "PRODUCTION"
+
+
+class MovementType(str, enum.Enum):
+    RECEIPT = "RECEIPT"
+    ISSUE = "ISSUE"
+    PRODUCTION_CONSUMPTION = "PRODUCTION_CONSUMPTION"
+    FINISHED_GOODS_CREATION = "FINISHED_GOODS_CREATION"
+    DISPATCH = "DISPATCH"
+
+
+class ProductionOrderStatus(str, enum.Enum):
+    PLANNED = "PLANNED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    CLOSED = "CLOSED"
+
+
+class DispatchStatus(str, enum.Enum):
+    PENDING = "PENDING"
+    DISPATCHED = "DISPATCHED"
+    CANCELLED = "CANCELLED"
+
+
+class ProductType(str, enum.Enum):
+    RAW_MATERIAL = "RAW_MATERIAL"
+    FINISHED_GOOD = "FINISHED_GOOD"
+
+
+class PackagingType(str, enum.Enum):
+    CAN = "CAN"
+    DRUM = "DRUM"
+    BARREL = "BARREL"
+    PAIL = "PAIL"
+    BAG = "BAG"
+    BOX = "BOX"
+    TOTE = "TOTE"
+    PALLET = "PALLET"
+    OTHER = "OTHER"
+
+
+class AuditAction(str, enum.Enum):
+    QR_GENERATED = "QR_GENERATED"
+    QR_PRINTED = "QR_PRINTED"
+    QR_DOWNLOADED = "QR_DOWNLOADED"
+    BATCH_CREATED = "BATCH_CREATED"
+    BATCH_ISSUED = "BATCH_ISSUED"
+    PRODUCTION_CONSUMED = "PRODUCTION_CONSUMED"
+    FG_CREATED = "FG_CREATED"
+    DISPATCH_COMPLETED = "DISPATCH_COMPLETED"
+    GRN_CREATED = "GRN_CREATED"
+    PRODUCTION_ORDER_CREATED = "PRODUCTION_ORDER_CREATED"

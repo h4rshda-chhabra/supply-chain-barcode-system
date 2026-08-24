@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: traceuser
+      POSTGRES_PASSWORD: tracepass
+      POSTGRES_DB: traceability
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U traceuser -d traceability"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg2://traceuser:tracepass@db:5432/traceability
+      TRACE_PUBLIC_BASE_URL: ${TRACE_PUBLIC_BASE_URL:-http://localhost:5173}
+      TRACE_ID_PREFIX: TRC
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    command: >
+      sh -c "alembic upgrade head && python -m app.seed.seed_data && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+
+volumes:
+  db_data:

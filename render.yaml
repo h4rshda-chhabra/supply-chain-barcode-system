@@ -1,0 +1,36 @@
+# Render Blueprint - https://render.com/docs/blueprint-spec
+# Deploy: Render dashboard -> New + -> Blueprint -> pick this repo.
+# Provisions the API (Docker, from backend/Dockerfile) and its Postgres DB
+# together. See README.md §11b for the full walkthrough, including the
+# frontend (Vercel) side and wiring the two together.
+services:
+  - type: web
+    name: traceability-backend
+    env: docker
+    region: oregon
+    plan: free
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /health
+    startCommand: sh -c "alembic upgrade head && python -m app.seed.seed_data && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: traceability-db
+          property: connectionString
+      - key: ENVIRONMENT
+        value: production
+      - key: TRACE_ID_PREFIX
+        value: TRC
+      - key: TRACE_PUBLIC_BASE_URL
+        # Set this to your Vercel frontend's URL (e.g. https://your-app.vercel.app)
+        # once you know it - see README.md §11b, step 4. The app refuses to
+        # boot in production with this left at a localhost value.
+        sync: false
+
+  - type: psql
+    name: traceability-db
+    region: oregon
+    plan: free
+    databaseName: traceability
+    user: traceuser
