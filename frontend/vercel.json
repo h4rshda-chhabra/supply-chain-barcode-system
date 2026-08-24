@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://traceability-backend.onrender.com/api/$1"
+      "destination": "https://supply-chain-barcode-system.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
