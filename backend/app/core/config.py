@@ -43,6 +43,20 @@ class Settings(BaseSettings):
     ENABLE_RBAC: bool = False
     ENABLE_APPROVAL_WORKFLOWS: bool = False
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_database_url(cls, v: str) -> str:
+        if v and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+psycopg2://", 1)
+        return v
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_database_url(cls, v: str) -> str:
+        if v and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+psycopg2://", 1)
+        return v
+
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def _stringify_cors_origins(cls, v):
